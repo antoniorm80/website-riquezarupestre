@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue, MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, MotionValue, number } from "framer-motion";
 
 export interface CollectionItem {
     id: number;
@@ -167,7 +167,7 @@ function Card({
     mouseX,
     mouseY,
     scrollSpring,
-    variant
+    variant,
 }: {
     item: CollectionItem,
     i: number,
@@ -177,17 +177,20 @@ function Card({
     mouseX: MotionValue<number>,
     mouseY: MotionValue<number>,
     scrollSpring: MotionValue<number>,
-    variant: CollectionSurferVariant
+    variant: CollectionSurferVariant,
 }) {
     const ref = useRef<HTMLDivElement>(null);
 
     // Calculate distance from mouse to center of card
     const distance = useTransform([mouseX, mouseY, scrollSpring], ([x, y]) => {
+        const xlen = (x as number)
+        const ylen = (y as number)
+
         if (!ref.current || variant === "simple") return 200; // Default large distance
         const rect = ref.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        const dist = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+        const dist = Math.sqrt(Math.pow(xlen - centerX, 2) + Math.pow(ylen - centerY, 2));
         return dist;
     });
 
